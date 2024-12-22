@@ -2,6 +2,9 @@ import React, { useEffect, useRef } from 'react'
 import { NavLink } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
 import {
+  CRow,
+  CCol,
+  CProgress,
   CContainer,
   CDropdown,
   CDropdownItem,
@@ -133,6 +136,16 @@ const AppHeader = () => {
       </CContainer>
       <CContainer className="px-4" fluid>
         <AppBreadcrumb />
+      </CContainer>
+      <CContainer
+        className={'d-none d-xl-block'}
+      >
+        <div className="text-body-secondary">{"Roast Progress"}</div>
+        <div className="fw-semibold text-truncate">
+          Light (57%)
+        </div>
+        <CProgress thin className="mt-2" color={"success"} value={57} />
+        <br/>
       </CContainer>
     </CHeader>
   )
