@@ -34,7 +34,12 @@ import {
   COffcanvasHeader,
   COffcanvasTitle,
   CCloseButton,
-  COffcanvasBody
+  COffcanvasBody,
+  CDropdown,
+  CDropdownToggle,
+  CDropdownMenu,
+  CDropdownItem,
+  CContainer
 } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
 import {
@@ -357,7 +362,7 @@ const Dashboard = () => {
       
       <COffcanvas placement="end" visible={visible} onHide={() => setVisible(false)}>
         <COffcanvasHeader>
-          <COffcanvasTitle>Controls</COffcanvasTitle>
+          <COffcanvasTitle>Side Panel</COffcanvasTitle>
           <CCloseButton className="text-reset" onClick={() => setVisible(false)} />
         </COffcanvasHeader>
         <COffcanvasBody>          
@@ -370,13 +375,57 @@ const Dashboard = () => {
           
           <CCard className='mt-2'>
             <CCardBody>
-              <h4>System</h4>
-              <CRow>
+              <h4>System</h4>              
+              <CCard>
+                <CCardBody>
+                <CRow>
+                  <CCol>
+                    <CContainer><h5 className='align-middle'>Bean Type</h5></CContainer>
+                  </CCol>
+                  <CCol>
+                    <CDropdown>
+                      <CDropdownToggle color="secondary">Arabica</CDropdownToggle>
+                      <CDropdownMenu>
+                        <CDropdownItem href="#">Action</CDropdownItem>
+                        <CDropdownItem href="#">Another action</CDropdownItem>
+                        <CDropdownItem href="#">Something else here</CDropdownItem>
+                      </CDropdownMenu>
+                    </CDropdown>
+                  </CCol>
+                </CRow>
+                <br/>
+                <CRow>
+                  <CCol>
+                    <CContainer><h5 className='align-middle'>Roast Level</h5></CContainer>
+                  </CCol>
+                  <CCol>
+                    <CDropdown>
+                      <CDropdownToggle color="secondary">Light</CDropdownToggle>
+                      <CDropdownMenu>
+                        <CDropdownItem href="#">Action</CDropdownItem>
+                        <CDropdownItem href="#">Another action</CDropdownItem>
+                        <CDropdownItem href="#">Something else here</CDropdownItem>
+                      </CDropdownMenu>
+                    </CDropdown>
+                  </CCol>
+                </CRow>    
+                </CCardBody>
+              </CCard>
+              <br/>
+              <h4>Control</h4>        
+              <CCard>
+                <CCardBody>
+                
+                <CRow className='align-items-center'>
                 <CCol>
+                  <CButton className='m-2' color="success" onClick={() => {}}>START</CButton>
                   <CButton className='m-2' color="danger" onClick={() => {}}>STOP</CButton>
                   <CButton color="warning" onClick={() => {}}>PAUSE</CButton>
                 </CCol>
               </CRow> 
+                </CCardBody>
+              </CCard>
+              
             </CCardBody>
           </CCard>
         </COffcanvasBody>
