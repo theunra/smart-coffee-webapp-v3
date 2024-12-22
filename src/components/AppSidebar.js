@@ -19,7 +19,6 @@ import { sygnet } from 'src/assets/brand/sygnet'
 
 // sidebar nav config
 import navigation from '../_nav'
-import { cilCoffee } from '@coreui/icons'
 
 const AppSidebar = () => {
   const dispatch = useDispatch()
@@ -40,9 +39,10 @@ const AppSidebar = () => {
       <CSidebarHeader className="border-bottom">
         <CSidebarBrand to="/">
           {/* <CIcon customClassName="sidebar-brand-full" icon={logo} height={32} /> */}
-          {/* <CIcon customClassName="sidebar-brand-full" icon={cilCoffee} height={32} /> */}
-          <CImage customClassName="sidebar-brand-full" style={{filter: "invert(100%)"}} src='src/assets/images/roast_sense_rsz.png' width={202} />
-          <CIcon customClassName="sidebar-brand-narrow" icon={sygnet} height={32} />
+          {/* <CIcon customClassName="sidebar-brand-full" height={32} /> */}
+          <CImage className="sidebar-brand-full" style={{filter: "invert(100%)"}} src='src/assets/images/roast_sense_rsz.png' width={200} />
+          <CImage className="sidebar-brand-narrow" style={{filter: "invert(100%)"}} src='src/assets/images/roast_sense_rsz_nr.png' width={20} />
+          {/* <CIcon customClassName="sidebar-brand-narrow" icon={sygnet} height={32} /> */}
         </CSidebarBrand>
         <CCloseButton
           className="d-lg-none"

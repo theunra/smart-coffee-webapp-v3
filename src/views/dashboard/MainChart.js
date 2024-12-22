@@ -1,10 +1,12 @@
-import React, { useEffect, useRef } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 
 import { CChartLine } from '@coreui/react-chartjs'
 import { getStyle } from '@coreui/utils'
 
 const MainChart = () => {
   const chartRef = useRef(null)
+
+  const [count, setCount] = useState(0);
 
   useEffect(() => {
     document.documentElement.addEventListener('ColorSchemeChange', () => {
@@ -24,9 +26,38 @@ const MainChart = () => {
         })
       }
     })
-  }, [chartRef])
 
-  const random = () => Math.round(Math.random() * 100)
+    const random = () => Math.round(Math.random() * 100)
+
+    const randGraphInterval = setInterval(() => {
+      if(count > 100) {
+        setCount(0)
+      } else{
+        setCount(count + random())
+      }
+
+      // setMyData(myData);
+      const now = new Date();
+      const min = now.getMinutes();
+      const sec = now.getSeconds();
+
+      chartRef.current.data.labels.shift();
+      chartRef.current.data.labels.push(min + ":" + sec);
+      chartRef.current.data.datasets[0].data.shift();
+      chartRef.current.data.datasets[0].data.push(count + random());
+
+      chartRef.current.data.datasets[1].data.shift();
+      chartRef.current.data.datasets[1].data.push(count + random());
+
+      chartRef.current.data.datasets[2].data.shift();
+      chartRef.current.data.datasets[2].data.push(count + random());
+      
+      chartRef.current.update()
+    }, 1000);
+
+    return () => clearInterval(randGraphInterval);
+  }, [chartRef, count])
+  
 
   return (
     <>
@@ -43,13 +74,13 @@ const MainChart = () => {
               pointHoverBackgroundColor: getStyle('--cui-info'),
               borderWidth: 2,
               data: [
-                random(50, 200),
-                random(50, 200),
-                random(50, 200),
-                random(50, 200),
-                random(50, 200),
-                random(50, 200),
-                random(50, 200),
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
               ],
               fill: true,
             },
@@ -60,13 +91,13 @@ const MainChart = () => {
               pointHoverBackgroundColor: getStyle('--cui-success'),
               borderWidth: 2,
               data: [
-                random(50, 200),
-                random(50, 200),
-                random(50, 200),
-                random(50, 200),
-                random(50, 200),
-                random(50, 200),
-                random(50, 200),
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
               ],
             },
             {
@@ -76,7 +107,15 @@ const MainChart = () => {
               pointHoverBackgroundColor: getStyle('--cui-danger'),
               borderWidth: 1,
               borderDash: [8, 5],
-              data: [65, 65, 65, 65, 65, 65, 65],
+              data: [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+              ],
             },
           ],
         }}

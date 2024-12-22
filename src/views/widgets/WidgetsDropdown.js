@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import PropTypes from 'prop-types'
 
 import {
@@ -36,6 +36,25 @@ const WidgetsDropdown = (props) => {
       }
     })
   }, [widgetChartRef1, widgetChartRef2])
+  
+  const chartRef = useRef(null)
+  const random = () => Math.round(Math.random() * 100)
+  const [count, setCount] = useState(0);
+  
+  useEffect(() => {
+    if(count > 100) {
+        setCount(0)
+      } else{
+        setCount(count + random())
+      }
+
+      const randGraphInterval = setInterval(() => {
+        chartRef.current.data.datasets[0].data[0] = (count + random());
+        chartRef.current.update();
+      }, 1000);
+
+      return () => clearInterval(randGraphInterval);
+  }, [count])
 
   return (
     <CRow className={props.className} xs={{ gutter: 4 }}>
@@ -245,7 +264,7 @@ const WidgetsDropdown = (props) => {
           }
           chart={
             <CChartLine
-              ref={widgetChartRef2}
+              ref={chartRef}
               className="mt-3 mx-3"
               style={{ height: '70px' }}
               data={{
@@ -282,7 +301,7 @@ const WidgetsDropdown = (props) => {
                   },
                   y: {
                     min: -9,
-                    max: 50,
+                    max: 120,
                     display: false,
                     grid: {
                       display: false,

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import PropTypes from 'prop-types'
 import { CWidgetStatsD, CRow, CCol } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
@@ -56,6 +56,7 @@ const WidgetsBrand = (props) => {
                     },
                   ],
                 }}
+                ref={chartRef}
                 options={chartOptions}
               />
             ),

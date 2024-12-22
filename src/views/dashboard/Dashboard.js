@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import classNames from 'classnames'
 
 import {
+  CHeader,
   CImage,
   CAvatar,
   CButtonGroup,
@@ -206,8 +207,9 @@ const Dashboard = () => {
     },
   ]
 
-  const [visible, setVisible] = useState(true)
-
+  const [visible, setVisible] = useState(false)
+  const [roastLevel, setRoastLevel] = useState("Light")
+  const [beanType, setBeanType] = useState("Arabica")
 
   return (
     <>
@@ -384,11 +386,10 @@ const Dashboard = () => {
                   </CCol>
                   <CCol>
                     <CDropdown>
-                      <CDropdownToggle color="secondary">Arabica</CDropdownToggle>
+                      <CDropdownToggle color="secondary">{beanType}</CDropdownToggle>
                       <CDropdownMenu>
-                        <CDropdownItem href="#">Action</CDropdownItem>
-                        <CDropdownItem href="#">Another action</CDropdownItem>
-                        <CDropdownItem href="#">Something else here</CDropdownItem>
+                        <CDropdownItem onClick={()=>{setBeanType("Arabica")}}>Arabica</CDropdownItem>
+                        <CDropdownItem onClick={()=>{setBeanType("Robusta")}}>Robusta</CDropdownItem>
                       </CDropdownMenu>
                     </CDropdown>
                   </CCol>
@@ -400,11 +401,11 @@ const Dashboard = () => {
                   </CCol>
                   <CCol>
                     <CDropdown>
-                      <CDropdownToggle color="secondary">Light</CDropdownToggle>
+                      <CDropdownToggle color="secondary">{roastLevel}</CDropdownToggle>
                       <CDropdownMenu>
-                        <CDropdownItem href="#">Action</CDropdownItem>
-                        <CDropdownItem href="#">Another action</CDropdownItem>
-                        <CDropdownItem href="#">Something else here</CDropdownItem>
+                        <CDropdownItem onClick={()=>{setRoastLevel("Light")}}>Light</CDropdownItem>
+                        <CDropdownItem onClick={()=>{setRoastLevel("Medium")}}>Medium</CDropdownItem>
+                        <CDropdownItem onClick={()=>{setRoastLevel("Dark")}}>Dark</CDropdownItem>
                       </CDropdownMenu>
                     </CDropdown>
                   </CCol>
@@ -430,6 +431,7 @@ const Dashboard = () => {
           </CCard>
         </COffcanvasBody>
       </COffcanvas>
+      <CButton color="primary" className='rounded-start-4 rounded-end-0' onClick={()=>{setVisible(true)}} style={{position: "fixed", top: 300, right: 0}}>Side<br/>Panel</CButton>
     </>
   )
 }
