@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import classNames from 'classnames'
 
 import {
@@ -81,8 +81,11 @@ import WidgetsDropdown from '../widgets/WidgetsDropdown'
 import MainChart from './MainChart'
 
 import Carousels from '../base/carousels/Carousels'
+import SensorContext from '../../contexts'
 
 const Dashboard = () => {
+  const {sensorData} = useContext(SensorContext);
+
   const progressExample = [
     // { title: 'Roast Level Detection', value: 'Light', percent: 40, color: 'success' },
     // { title: 'MQ136', value: '5032', percent: 20, color: 'info' },
@@ -211,6 +214,10 @@ const Dashboard = () => {
   const [roastLevel, setRoastLevel] = useState("Light")
   const [beanType, setBeanType] = useState("Arabica")
 
+  useEffect(() => {
+    console.log(sensorData);
+  },[sensorData]);
+
   return (
     <>
       {/* <CCol
@@ -286,7 +293,7 @@ const Dashboard = () => {
         <h4>{"Vision Sensor"}</h4>
           <CRow>
             <CCol xs>
-              <CImage fluid rounded src="src/assets/images/kopi_capture.jpg" width={500} height={500}/>
+              <CImage fluid rounded src={new URL("http://127.0.0.1:5000/video_feed")} width={500} height={500}/>
             </CCol>
             <CCol xs>
               <CTable>
@@ -328,7 +335,7 @@ const Dashboard = () => {
         <h4>{"Audio Sensor"}</h4>
           <CRow>
             <CCol xs>
-              <CImage fluid rounded src="src/assets/images/spectro.jpg" width={500} height={500}/>
+              <CImage fluid rounded src={new URL("http://127.0.0.1:5000/audio_feed")} width={500} height={500}/>
             </CCol>
             <CCol xs>
               <CTable>

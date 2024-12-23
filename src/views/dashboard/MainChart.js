@@ -1,12 +1,22 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useContext, useEffect, useRef, useState } from 'react'
 
 import { CChartLine } from '@coreui/react-chartjs'
 import { getStyle } from '@coreui/utils'
+import SensorContext from '../../contexts'
 
 const MainChart = () => {
   const chartRef = useRef(null)
 
   const [count, setCount] = useState(0);
+  const [data, setData] = useState([0, 10, 20, 30, 40, 50, 6])
+
+  const defaultData = [];
+  const defaultLabels = [];
+
+  for(let i = 0 ; i < 30; i++){
+    defaultData.push(0);
+    defaultLabels.push("0:00");
+  }
 
   useEffect(() => {
     document.documentElement.addEventListener('ColorSchemeChange', () => {
@@ -27,36 +37,20 @@ const MainChart = () => {
       }
     })
 
-    const random = () => Math.round(Math.random() * 100)
+  }, [chartRef])
 
-    const randGraphInterval = setInterval(() => {
-      if(count > 100) {
-        setCount(0)
-      } else{
-        setCount(count + random())
-      }
+  const {sensorData} = useContext(SensorContext);
 
-      // setMyData(myData);
-      const now = new Date();
-      const min = now.getMinutes();
-      const sec = now.getSeconds();
+  useEffect(() => {
+    const now = new Date();
+    const min = now.getMinutes();
+    const sec = now.getSeconds();
 
-      chartRef.current.data.labels.shift();
-      chartRef.current.data.labels.push(min + ":" + sec);
-      chartRef.current.data.datasets[0].data.shift();
-      chartRef.current.data.datasets[0].data.push(count + random());
-
-      chartRef.current.data.datasets[1].data.shift();
-      chartRef.current.data.datasets[1].data.push(count + random());
-
-      chartRef.current.data.datasets[2].data.shift();
-      chartRef.current.data.datasets[2].data.push(count + random());
-      
-      chartRef.current.update()
-    }, 1000);
-
-    return () => clearInterval(randGraphInterval);
-  }, [chartRef, count])
+    chartRef.current.data.labels.shift();
+    chartRef.current.data.labels.push(min + ":" + sec);
+    chartRef.current.data.datasets[0].data = sensorData;
+    chartRef.current.update()
+    },[sensorData]);
   
 
   return (
@@ -65,7 +59,7 @@ const MainChart = () => {
         ref={chartRef}
         style={{ height: '300px', marginTop: '40px' }}
         data={{
-          labels: ['1:00', '2:00', '3:00', '4:00', '5:00', '6:00', '7:00'],
+          labels: defaultLabels,
           datasets: [
             {
               label: 'My First dataset',
@@ -73,15 +67,7 @@ const MainChart = () => {
               borderColor: getStyle('--cui-info'),
               pointHoverBackgroundColor: getStyle('--cui-info'),
               borderWidth: 2,
-              data: [
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
-              ],
+              data: defaultData,
               fill: true,
             },
             {
@@ -90,15 +76,7 @@ const MainChart = () => {
               borderColor: getStyle('--cui-success'),
               pointHoverBackgroundColor: getStyle('--cui-success'),
               borderWidth: 2,
-              data: [
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
-              ],
+              data: defaultData,
             },
             {
               label: 'My Third dataset',
@@ -107,19 +85,12 @@ const MainChart = () => {
               pointHoverBackgroundColor: getStyle('--cui-danger'),
               borderWidth: 1,
               borderDash: [8, 5],
-              data: [
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
-              ],
+              data: defaultData,
             },
           ],
         }}
         options={{
+          animation: false,
           maintainAspectRatio: false,
           plugins: {
             legend: {

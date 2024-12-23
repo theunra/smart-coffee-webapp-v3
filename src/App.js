@@ -1,4 +1,4 @@
-import React, { Suspense, useEffect } from 'react'
+import React, { createContext, Suspense, useEffect, useState } from 'react'
 import { HashRouter, Route, Routes } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 
@@ -7,6 +7,7 @@ import './scss/style.scss'
 
 // We use those styles to show code examples, you should remove them in your application.
 import './scss/examples.scss'
+import SensorContext from './contexts'
 
 // Containers
 const DefaultLayout = React.lazy(() => import('./layout/DefaultLayout'))
@@ -35,7 +36,31 @@ const App = () => {
     setColorMode(storedTheme)
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
+  const [sensorData, setSensorData] = useState([0, 1, 2, 3, 4, 5, 6])
+
+  useEffect(() => {
+    if ('EventSource' in window) {
+      const source = new EventSource('http://127.0.0.1:5000/sensor_feed');
+
+      source.addEventListener('message', function(e) {
+        // console.log(e);
+        const sdata = JSON.parse(e.data);
+        setSensorData(sdata["data"]);
+      }, false);
+
+      source.addEventListener('open', function(e) {
+        console.log("successful connection.");
+      }, false);
+
+      source.addEventListener('error', function(e) {
+        console.log(e);
+      }, false);
+    }
+  }, []);
+
+
   return (
+    <SensorContext.Provider value={{sensorData : sensorData}}>
     <HashRouter>
       <Suspense
         fallback={
@@ -53,6 +78,7 @@ const App = () => {
         </Routes>
       </Suspense>
     </HashRouter>
+    </SensorContext.Provider>
   )
 }
 

@@ -38,23 +38,23 @@ const WidgetsDropdown = (props) => {
   }, [widgetChartRef1, widgetChartRef2])
   
   const chartRef = useRef(null)
-  const random = () => Math.round(Math.random() * 100)
+  const random = () => Math.round(Math.random() * 50)
   const [count, setCount] = useState(0);
   
-  useEffect(() => {
-    if(count > 100) {
-        setCount(0)
-      } else{
-        setCount(count + random())
-      }
+  // useEffect(() => {
+  //   if(count > 100) {
+  //       setCount(0)
+  //     } else{
+  //       setCount(count + random())
+  //     }
 
-      const randGraphInterval = setInterval(() => {
-        chartRef.current.data.datasets[0].data[0] = (count + random());
-        chartRef.current.update();
-      }, 1000);
+  //     const randGraphInterval = setInterval(() => {
+  //       chartRef.current.data.datasets[0].data[0] = (count + random());
+  //       chartRef.current.update();
+  //     }, 1000);
 
-      return () => clearInterval(randGraphInterval);
-  }, [count])
+  //     return () => clearInterval(randGraphInterval);
+  // }, [count])
 
   return (
     <CRow className={props.className} xs={{ gutter: 4 }}>
