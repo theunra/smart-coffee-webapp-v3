@@ -5,10 +5,8 @@ import { getStyle } from '@coreui/utils'
 import SensorContext from '../../contexts'
 
 const MainChart = () => {
-  const chartRef = useRef(null)
-
-  const [count, setCount] = useState(0);
-  const [data, setData] = useState([0, 10, 20, 30, 40, 50, 6])
+  const chartRef = useRef(null);
+  const [chartHovered, setChartHovered] = useState(false);
 
   const defaultData = [];
   const defaultLabels = [];
@@ -48,41 +46,97 @@ const MainChart = () => {
 
     chartRef.current.data.labels.shift();
     chartRef.current.data.labels.push(min + ":" + sec);
-    chartRef.current.data.datasets[0].data = sensorData;
-    chartRef.current.update()
+    chartRef.current.data.datasets[0].data = sensorData.mq135;
+    chartRef.current.data.datasets[1].data = sensorData.mq136;
+    chartRef.current.data.datasets[2].data = sensorData.mq137;
+    chartRef.current.data.datasets[3].data = sensorData.mq138;
+    chartRef.current.data.datasets[4].data = sensorData.mq2;
+    chartRef.current.data.datasets[5].data = sensorData.mq3;
+    chartRef.current.data.datasets[6].data = sensorData.tgs822;
+    chartRef.current.data.datasets[7].data = sensorData.tgs2620;
+
+    if(!chartHovered) chartRef.current.update()
+
     },[sensorData]);
   
 
   return (
     <>
       <CChartLine
+        onMouseEnter={()=>{setChartHovered(true)}}
+        onMouseLeave={()=>{setChartHovered(false)}}
         ref={chartRef}
         style={{ height: '300px', marginTop: '40px' }}
         data={{
           labels: defaultLabels,
           datasets: [
             {
-              label: 'My First dataset',
+              label: 'MQ135',
               backgroundColor: `rgba(${getStyle('--cui-info-rgb')}, .1)`,
-              borderColor: getStyle('--cui-info'),
-              pointHoverBackgroundColor: getStyle('--cui-info'),
+              borderColor: getStyle('--cui-primary'),
+              pointHoverBackgroundColor: getStyle('--cui-primary'),
               borderWidth: 2,
               data: defaultData,
               fill: true,
             },
             {
-              label: 'My Second dataset',
+              label: 'MQ136',
               backgroundColor: 'transparent',
-              borderColor: getStyle('--cui-success'),
-              pointHoverBackgroundColor: getStyle('--cui-success'),
+              borderColor: getStyle('--cui-info'),
+              pointHoverBackgroundColor: getStyle('--cui-info'),
               borderWidth: 2,
               data: defaultData,
             },
             {
-              label: 'My Third dataset',
+              label: 'MQ137',
               backgroundColor: 'transparent',
-              borderColor: getStyle('--cui-danger'),
-              pointHoverBackgroundColor: getStyle('--cui-danger'),
+              borderColor: getStyle('--cui-success'),
+              pointHoverBackgroundColor: getStyle('--cui-success'),
+              borderWidth: 1,
+              // borderDash: [8, 5],
+              data: defaultData,
+            },
+            {
+              label: 'MQ138',
+              backgroundColor: 'transparent',
+              borderColor: getStyle('--cui-warning'),
+              pointHoverBackgroundColor: getStyle('--cui-warning'),
+              borderWidth: 1,
+              // borderDash: [8, 5],
+              data: defaultData,
+            },
+            {
+              label: 'MQ2',
+              backgroundColor: 'transparent',
+              borderColor: getStyle('--cui-primary'),
+              pointHoverBackgroundColor: getStyle('--cui-primary'),
+              borderWidth: 1,
+              borderDash: [8, 5],
+              data: defaultData,
+            },
+            {
+              label: 'MQ3',
+              backgroundColor: 'transparent',
+              borderColor: getStyle('--cui-info'),
+              pointHoverBackgroundColor: getStyle('--cui-info'),
+              borderWidth: 1,
+              borderDash: [8, 5],
+              data: defaultData,
+            },
+            {
+              label: 'TGS822',
+              backgroundColor: 'transparent',
+              borderColor: getStyle('--cui-success'),
+              pointHoverBackgroundColor: getStyle('--cui-success'),
+              borderWidth: 1,
+              borderDash: [8, 5],
+              data: defaultData,
+            },
+            {
+              label: 'TGS2620',
+              backgroundColor: 'transparent',
+              borderColor: getStyle('--cui-warning'),
+              pointHoverBackgroundColor: getStyle('--cui-warning'),
               borderWidth: 1,
               borderDash: [8, 5],
               data: defaultData,

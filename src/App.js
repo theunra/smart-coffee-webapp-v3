@@ -9,6 +9,12 @@ import './scss/style.scss'
 import './scss/examples.scss'
 import SensorContext from './contexts'
 
+const Command = {
+  STOP_SESSION : 0,
+  START_SESSION : 1,
+  PAUSE_SESSION : 2,
+}
+
 // Containers
 const DefaultLayout = React.lazy(() => import('./layout/DefaultLayout'))
 
@@ -36,16 +42,24 @@ const App = () => {
     setColorMode(storedTheme)
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
-  const [sensorData, setSensorData] = useState([0, 1, 2, 3, 4, 5, 6])
+  const [sensorData, setSensorData] = useState({
+      mq135   : [0, 0, 0, 0, 0],
+      mq136   : [0, 0, 0, 0, 0],
+      mq137   : [0, 0, 0, 0, 0],
+      mq138   : [0, 0, 0, 0, 0],
+      mq2     : [0, 0, 0, 0, 0],
+      mq3     : [0, 0, 0, 0, 0],
+      tgs822  : [0, 0, 0, 0, 0],
+      tgs2620 : [0, 0, 0, 0, 0]
+    })
 
   useEffect(() => {
     if ('EventSource' in window) {
       const source = new EventSource('http://127.0.0.1:5000/sensor_feed');
 
       source.addEventListener('message', function(e) {
-        // console.log(e);
         const sdata = JSON.parse(e.data);
-        setSensorData(sdata["data"]);
+        setSensorData(sdata);
       }, false);
 
       source.addEventListener('open', function(e) {
@@ -55,6 +69,21 @@ const App = () => {
       source.addEventListener('error', function(e) {
         console.log(e);
       }, false);
+
+      const post = fetch(
+        'http://127.0.0.1:5000/session',
+        {
+          method: 'POST',
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            command: Command.START_SESSION,
+          })
+        }
+
+      )
     }
   }, []);
 
