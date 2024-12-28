@@ -83,6 +83,13 @@ import MainChart from './MainChart'
 import Carousels from '../base/carousels/Carousels'
 import SensorContext from '../../contexts'
 
+const Command = {
+  STOP_SESSION : 0,
+  START_SESSION : 1,
+  PAUSE_SESSION : 2,
+  SET_ROAST_LEVEL : 3,
+}
+
 const Dashboard = () => {
   const {sensorData} = useContext(SensorContext);
 
@@ -95,6 +102,38 @@ const Dashboard = () => {
   useEffect(() => {
     // console.log(sensorData);
   },[sensorData]);
+
+  const requestStartSession = () => {
+    const post = fetch(
+      'http://127.0.0.1:5000/session',
+      {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          command: Command.START_SESSION,
+        })
+      }
+    )
+  }
+
+  const requestStopSession = () => {
+    const post = fetch(
+      'http://127.0.0.1:5000/session',
+      {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          command: Command.STOP_SESSION,
+        })
+      }
+    )
+  }
 
   return (
     <>
@@ -304,8 +343,8 @@ const Dashboard = () => {
                 
                 <CRow className='align-items-center'>
                 <CCol>
-                  <CButton className='m-2' color="success" onClick={() => {}}>START</CButton>
-                  <CButton className='m-2' color="danger" onClick={() => {}}>STOP</CButton>
+                  <CButton className='m-2' color="success" onClick={() => {requestStartSession()}}>START</CButton>
+                  <CButton className='m-2' color="danger" onClick={() => {requestStopSession()}}>STOP</CButton>
                   <CButton color="warning" onClick={() => {}}>PAUSE</CButton>
                 </CCol>
               </CRow> 

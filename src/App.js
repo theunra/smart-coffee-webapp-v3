@@ -9,12 +9,6 @@ import './scss/style.scss'
 import './scss/examples.scss'
 import SensorContext from './contexts'
 
-const Command = {
-  STOP_SESSION : 0,
-  START_SESSION : 1,
-  PAUSE_SESSION : 2,
-}
-
 // Containers
 const DefaultLayout = React.lazy(() => import('./layout/DefaultLayout'))
 
@@ -53,43 +47,45 @@ const App = () => {
       tgs2620 : [0, 0, 0, 0, 0]
     })
 
+  const [eventData, setEventData] = useState({})
+
   useEffect(() => {
     if ('EventSource' in window) {
-      const source = new EventSource('http://127.0.0.1:5000/sensor_feed');
+      const source_sensor = new EventSource('http://127.0.0.1:5000/sensor_feed');
 
-      source.addEventListener('message', function(e) {
+      source_sensor.addEventListener('message', function(e) {
         const sdata = JSON.parse(e.data);
         setSensorData(sdata);
       }, false);
 
-      source.addEventListener('open', function(e) {
+      source_sensor.addEventListener('open', function(e) {
         console.log("successful connection.");
       }, false);
 
-      source.addEventListener('error', function(e) {
+      source_sensor.addEventListener('error', function(e) {
         console.log(e);
       }, false);
 
-      const post = fetch(
-        'http://127.0.0.1:5000/session',
-        {
-          method: 'POST',
-          headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            command: Command.START_SESSION,
-          })
-        }
+      const source_events = new EventSource('http://127.0.0.1:5000/events_feed');
 
-      )
+      source_events.addEventListener('message', function(e) {
+        const sdata = JSON.parse(e.data);
+        setEventData(sdata);
+      }, false);
+
+      source_events.addEventListener('open', function(e) {
+        console.log("successful connection.");
+      }, false);
+
+      source_events.addEventListener('error', function(e) {
+        console.log(e);
+      }, false);
     }
   }, []);
 
 
   return (
-    <SensorContext.Provider value={{sensorData : sensorData}}>
+    <SensorContext.Provider value={{sensorData : sensorData, eventData : eventData}}>
     <HashRouter>
       <Suspense
         fallback={

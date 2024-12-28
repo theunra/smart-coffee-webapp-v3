@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react'
+import React, { useContext, useEffect, useRef, useState } from 'react'
 import { NavLink } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
 import {
@@ -30,6 +30,7 @@ import {
 
 import { AppBreadcrumb } from './index'
 import { AppHeaderDropdown } from './header/index'
+import SensorContext from '../contexts'
 
 const AppHeader = () => {
   const headerRef = useRef()
@@ -43,7 +44,25 @@ const AppHeader = () => {
       headerRef.current &&
         headerRef.current.classList.toggle('shadow-sm', document.documentElement.scrollTop > 0)
     })
-  }, [])
+  }, []);
+
+  const {eventData} = useContext(SensorContext);
+  const [roastLevel, SetRoastLevel] = useState('Unclass')
+  const [roastProgress, SetRoastProgress] = useState(0.0)
+
+  const toTitleCase = (str) => {
+    return str.replace(
+      /\w\S*/g,
+      text => text.charAt(0).toUpperCase() + text.substring(1).toLowerCase()
+    );
+  }
+
+  useEffect(()=>{
+    if(eventData["event"] == "roast"){
+      SetRoastLevel(toTitleCase(eventData["level"]));
+      SetRoastProgress(eventData["progress"].toFixed(1));
+    }
+  }, [eventData]);
 
   return (
     <CHeader position="sticky" className="mb-4 p-0" ref={headerRef}>
@@ -142,9 +161,9 @@ const AppHeader = () => {
       >
         <div className="text-body-secondary">{"Roast Progress"}</div>
         <div className="fw-semibold text-truncate">
-          Light (57%)
+          {roastLevel} ({roastProgress}%)
         </div>
-        <CProgress thin className="mt-2" color={"success"} value={57} />
+        <CProgress thin className="mt-2" color={"success"} value={roastProgress} />
         <br/>
       </CContainer>
     </CHeader>
